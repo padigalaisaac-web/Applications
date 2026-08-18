@@ -1,6 +1,5 @@
 import express from 'express';
 import cors from 'cors';
-import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 import { connectDB } from './config/db.js';
 import bookRoutes from './routes/bookRoutes.js';
@@ -13,9 +12,6 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-const uri = process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/your-db-name';
-mongoose.connect(uri);
-
 app.use(cors({ origin: process.env.CLIENT_ORIGIN || true }));
 app.use(express.json());
 
@@ -27,7 +23,9 @@ app.use('/api/transactions', transactionRoutes);
 app.use(notFound);
 app.use(errorHandler);
 
-connectDB(process.env.MONGODB_URI);
+const uri = process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/librarymanagement';
+
+connectDB(uri)
   .then(() => {
     app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
   })
