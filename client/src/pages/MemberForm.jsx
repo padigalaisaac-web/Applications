@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { memberService } from '../services/api.js';
 import Message from '../components/Message.jsx';
+import Loader from '../components/Loader.jsx';
 
 const empty = { name: '', email: '', phone: '' };
 
@@ -12,15 +13,18 @@ export default function MemberForm() {
   const [error, setError] = useState('');
   const [fieldErrors, setFieldErrors] = useState({});
   const [saving, setSaving] = useState(false);
+  const [loading, setLoading] = useState(Boolean(id));
 
   useEffect(() => {
     if (!id) return;
+    setLoading(true);
     memberService
       .get(id)
       .then((member) =>
         setForm({ name: member.name, email: member.email, phone: member.phone })
       )
-      .catch((err) => setError(err.message));
+      .catch((err) => setError(err.message))
+      .finally(() => setLoading(false));
   }, [id]);
 
   function validate() {
@@ -55,30 +59,33 @@ export default function MemberForm() {
     <section>
       <h2>{id ? 'Edit Member' : 'Add Member'}</h2>
       <Message type="error" text={error} />
+      <Loader show={loading} />
       <form className="form" onSubmit={handleSubmit} noValidate>
-        <label>
-          Name
-          <input value={form.name} onChange={(e) => update('name', e.target.value)} />
-          {fieldErrors.name && <span className="field-error">{fieldErrors.name}</span>}
-        </label>
-        <label>
-          Email
-          <input value={form.email} onChange={(e) => update('email', e.target.value)} />
-          {fieldErrors.email && <span className="field-error">{fieldErrors.email}</span>}
-        </label>
-        <label>
-          Phone
-          <input value={form.phone} onChange={(e) => update('phone', e.target.value)} />
-          {fieldErrors.phone && <span className="field-error">{fieldErrors.phone}</span>}
-        </label>
-        <div className="actions">
-          <button className="btn primary" type="submit" disabled={saving}>
-            {saving ? 'Saving...' : 'Save'}
-          </button>
-          <button className="btn" type="button" onClick={() => navigate('/members')}>
-            Cancel
-          </button>
-        </div>
+        <fieldset className="fields" disabled={loading}>
+          <label>
+            Name
+            <input value={form.name} onChange={(e) => update('name', e.target.value)} />
+            {fieldErrors.name && <span className="field-error">{fieldErrors.name}</span>}
+          </label>
+          <label>
+            Email
+            <input value={form.email} onChange={(e) => update('email', e.target.value)} />
+            {fieldErrors.email && <span className="field-error">{fieldErrors.email}</span>}
+          </label>
+          <label>
+            Phone
+            <input value={form.phone} onChange={(e) => update('phone', e.target.value)} />
+            {fieldErrors.phone && <span className="field-error">{fieldErrors.phone}</span>}
+          </label>
+          <div className="actions">
+            <button className="btn primary" type="submit" disabled={saving || loading}>
+              {saving ? 'Saving...' : 'Save'}
+            </button>
+            <button className="btn" type="button" onClick={() => navigate('/members')}>
+              Cancel
+            </button>
+          </div>
+        </fieldset>
       </form>
     </section>
   );
