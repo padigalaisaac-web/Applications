@@ -9,7 +9,7 @@ import transactionRoutes from './routes/transactionRoutes.js';
 import { notFound, errorHandler } from './middleware/errorHandler.js';
 
 dotenv.config();
-const mongoose = require('mongoose');
+
 const app = express();
 const PORT = process.env.PORT || 5000;
 
