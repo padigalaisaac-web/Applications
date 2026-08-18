@@ -27,7 +27,7 @@ app.use('/api/transactions', transactionRoutes);
 app.use(notFound);
 app.use(errorHandler);
 
-connectDB(MONGODB_URI)
+connectDB(process.env.MONGODB_URI);
   .then(() => {
     app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
   })
