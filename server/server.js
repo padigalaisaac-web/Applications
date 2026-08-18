@@ -1,5 +1,6 @@
 import express from 'express';
 import cors from 'cors';
+import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 import { connectDB } from './config/db.js';
 import bookRoutes from './routes/bookRoutes.js';
@@ -8,12 +9,12 @@ import transactionRoutes from './routes/transactionRoutes.js';
 import { notFound, errorHandler } from './middleware/errorHandler.js';
 
 dotenv.config();
-
+const mongoose = require('mongoose');
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-const MONGODB_URI =
-  process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/librarymanagement';
+const uri = process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/your-db-name';
+mongoose.connect(uri);
 
 app.use(cors({ origin: process.env.CLIENT_ORIGIN || true }));
 app.use(express.json());
