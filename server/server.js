@@ -11,6 +11,8 @@ dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 5000;
+const MONGODB_URI =
+  process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/library_management';
 
 app.use(cors({ origin: process.env.CLIENT_ORIGIN || true }));
 app.use(express.json());
@@ -23,9 +25,7 @@ app.use('/api/transactions', transactionRoutes);
 app.use(notFound);
 app.use(errorHandler);
 
-const uri = process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/librarymanagement';
-
-connectDB(uri)
+connectDB(MONGODB_URI)
   .then(() => {
     app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
   })
