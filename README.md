@@ -39,7 +39,7 @@ cd server
 npm install
 cp .env.example .env      # adjust MONGODB_URI if needed
 npm run seed              # optional sample data
-npm run dev               # http://localhost:5000
+npm run dev               # https://librarymanage.up.railway.app/
 ```
 
 Frontend:
@@ -47,7 +47,7 @@ Frontend:
 ```bash
 cd client
 npm install
-cp .env.example .env      # VITE_API_URL=http://localhost:5000/api
+cp .env.example .env      # VITE_API_URL=https://librarymanage.up.railway.app/api
 npm run dev               # http://localhost:5173
 ```
 
